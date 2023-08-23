@@ -5,31 +5,17 @@ export default {
 		const params = new URLSearchParams(new URL(request.url).search);
 		const title = params.get('title') || 'Lorem ipsum';
 
-		// Split the title into lines of max 25 characters
-		const lines = title
-			.trim()
-			.split(/(.{0,25})(?:\s|$)/g)
-			.filter(Boolean);
-
-		// Map the lines to your placeholders
-		const data: Record<string, string> = {
-			line1: lines[0],
-			line2: lines[1],
-			line3: lines[2],
-		};
-
 		const inter400ArrayBuffer = await env.WORKER_OG.get('inter400', 'arrayBuffer');
 		const ogIconBase64 = await env.WORKER_OG.get('ogIconBase64', 'text');
 
 		const html = `
-      <div
-        style="
-          background: black;
-          height: 100%;
-          width: 100%;
-          display: flex;
-          align-items: flex-start;
-          justify-content: flex-start;"
+      <div style="
+        background: black;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;"
       >
         <div style="
           display: flex;
@@ -44,23 +30,34 @@ export default {
             padding: 8rem 6rem;"
           >
             <img
-              style="margin-top: 2rem"
               height="92"
-              src="data:image/png;base64,${ogIconBase64}"
               width="92"
+              src="data:image/png;base64,${ogIconBase64}"
             />
-            <h1 style="
-              padding-left: 3rem;
-              font-size: 60px;
-              color: white;
-              font-weight: bold;
-              text-align: left;"
+            <div style="
+              display: flex;
+              align-items: flex-start;
+              flex-direction: column;
+              padding-left: 3rem;"
             >
+              <span style="
+                font-size: 24px;
+                color: #999999;
+                text-align: left;"
+              >
+                Vinh Pham
+              </span>
+              <span style="
+                font-size: 60px;
+                color: white;
+                text-align: left;"
+              >
                 ${title}
-            </h1>
+              </span>
             </div>
+          </div>
         </div>
-    </div>
+      </div>
     `;
 
 		return new ImageResponse(html, {
