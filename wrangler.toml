@@ -1,3 +1,7 @@
+kv_namespaces = [
+  { binding = "WORKER_OG", id = "bdf583f7be3f4bc08416bff357caec5f" }
+]
+
 name = "workers"
 main = "src/index.ts"
 compatibility_date = "2023-08-23"
@@ -6,8 +10,7 @@ env = { }
 
 [route]
 pattern = "workers.vinh.dev/og"
-zone_name = ""
-script = "workers"
+zone_name = "vinh.dev"
 
 [triggers]
 crons = [ ]
