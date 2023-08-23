@@ -33,28 +33,28 @@ export default {
       >
         <div style="
           display: flex;
-          align-items: flex-start;
-          justify-content: flex-end;
+          align-items: center;
+          justify-content: flex-start;
           height: 100%;"
         >
           <div style="
             display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
+            align-items: flex-start;
             width: 100%;
-            height: 100%;
-            padding: 10rem 5rem;"
+            padding: 8rem 6rem;"
           >
             <img
+              style="margin-top: 2rem"
               height="92"
               src="data:image/png;base64,${ogIconBase64}"
               width="92"
             />
             <h1 style="
-                font-size: 60px;
-                color: white;
-                font-weight: bold;
-                text-align: left;"
+              padding-left: 3rem;
+              font-size: 60px;
+              color: white;
+              font-weight: bold;
+              text-align: left;"
             >
                 ${title}
             </h1>
