@@ -1,11 +1,12 @@
 import { ImageResponse } from 'workers-og';
 
 export default {
+  // @ts-ignore
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
 		const params = new URLSearchParams(new URL(request.url).search);
 		const title = params.get('title') || 'Lorem ipsum';
 
-		const inter400ArrayBuffer = await env.WORKER_OG.get('inter400', 'arrayBuffer');
+		const inter400 = await env.WORKER_OG.get('inter400', 'arrayBuffer');
 		const ogIconBase64 = await env.WORKER_OG.get('ogIconBase64', 'text');
 
 		const html = `
@@ -41,9 +42,10 @@ export default {
               padding-left: 3rem;"
             >
               <span style="
-                font-size: 24px;
+                font-size: 28px;
                 color: #999999;
-                text-align: left;"
+                text-align: left;
+                padding-bottom: 0.4rem"
               >
                 Vinh Pham
               </span>
@@ -66,7 +68,7 @@ export default {
 			fonts: [
 				{
 					name: 'Inter',
-					data: inter400ArrayBuffer,
+					data: inter400,
 					style: 'normal',
 				},
 			],
