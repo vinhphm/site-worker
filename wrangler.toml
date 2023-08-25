@@ -9,7 +9,7 @@ usage_model = "bundled"
 env = { }
 
 [route]
-pattern = "workers.vinh.dev/og*"
+pattern = "worker.vinh.dev/og"
 zone_name = "vinh.dev"
 
 [triggers]
