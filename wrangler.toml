@@ -1,16 +1,16 @@
-kv_namespaces = [
-  { binding = "WORKER_OG", id = "bdf583f7be3f4bc08416bff357caec5f" }
-]
-
 name = "og"
 main = "src/index.ts"
 compatibility_date = "2023-08-23"
 usage_model = "bundled"
 env = { }
 
-[route]
-pattern = "worker.vinh.dev/og"
-zone_name = "vinh.dev"
+kv_namespaces = [
+  { binding = "WORKER_OG", id = "bdf583f7be3f4bc08416bff357caec5f" }
+]
+
+routes = [
+  { pattern = "worker.vinh.dev/og*", zone_name = "vinh.dev" }
+]
 
 [triggers]
 crons = [ ]

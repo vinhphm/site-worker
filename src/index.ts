@@ -1,12 +1,13 @@
 import { ImageResponse } from 'workers-og';
 
-export default {
-  // @ts-ignore
-	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+const handler: ExportedHandler = {
+	async fetch(request, env, ctx) {
 		const params = new URLSearchParams(new URL(request.url).search);
 		const title = params.get('title') || 'Lorem ipsum';
 
+    // @ts-ignore
 		const inter400 = await env.WORKER_OG.get('inter400', 'arrayBuffer');
+    // @ts-ignore
 		const ogIconBase64 = await env.WORKER_OG.get('ogIconBase64', 'text');
 
 		const html = `
@@ -75,3 +76,5 @@ export default {
 		});
 	},
 };
+
+export default handler;
