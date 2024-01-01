@@ -6,7 +6,7 @@ const handler: ExportedHandler = {
 		const title = params.get('title') || 'Lorem ipsum';
 
     // @ts-ignore
-		const geist400 = await env.WORKER_OG.get('geist400', 'arrayBuffer');
+		const geist500 = await env.WORKER_OG.get('geist500', 'arrayBuffer');
     // @ts-ignore
 		const ogIconBase64 = await env.WORKER_OG.get('ogIconBase64', 'text');
 
@@ -44,6 +44,7 @@ const handler: ExportedHandler = {
             >
               <span style="
                 font-size: 28px;
+                letter-spacing: -.05em;
                 color: #999999;
                 text-align: left;
                 padding-bottom: 0.4rem"
@@ -52,6 +53,7 @@ const handler: ExportedHandler = {
               </span>
               <span style="
                 font-size: 60px;
+                letter-spacing: -.05em;
                 color: white;
                 text-align: left;"
               >
@@ -69,7 +71,7 @@ const handler: ExportedHandler = {
 			fonts: [
 				{
 					name: 'Geist Sans',
-					data: geist400,
+					data: geist500,
 					style: 'normal',
 				},
 			],
