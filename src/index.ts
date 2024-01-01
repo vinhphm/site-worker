@@ -6,7 +6,7 @@ const handler: ExportedHandler = {
 		const title = params.get('title') || 'Lorem ipsum';
 
     // @ts-ignore
-		const inter400 = await env.WORKER_OG.get('inter400', 'arrayBuffer');
+		const geist400 = await env.WORKER_OG.get('geist400', 'arrayBuffer');
     // @ts-ignore
 		const ogIconBase64 = await env.WORKER_OG.get('ogIconBase64', 'text');
 
@@ -68,8 +68,8 @@ const handler: ExportedHandler = {
 			height: 630,
 			fonts: [
 				{
-					name: 'Inter',
-					data: inter400,
+					name: 'Geist Sans',
+					data: geist400,
 					style: 'normal',
 				},
 			],
