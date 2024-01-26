@@ -12,7 +12,7 @@ const handler: ExportedHandler = {
 
 		const html = `
       <div style="
-        background: black;
+        background: #111010;
         height: 100%;
         width: 100%;
         display: flex;
