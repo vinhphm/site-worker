@@ -21,45 +21,33 @@ const handler: ExportedHandler = {
       >
         <div style="
           display: flex;
-          align-items: center;
+          align-items: flex-start;
           justify-content: flex-start;
           height: 100%;"
         >
           <div style="
             display: flex;
-            align-items: flex-start;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
             width: 100%;
-            padding: 8rem 6rem;"
+            padding: 5rem;"
           >
+            
             <img
               height="92"
               width="92"
               src="data:image/png;base64,${ogIconBase64}"
             />
-            <div style="
-              display: flex;
-              align-items: flex-start;
-              flex-direction: column;
-              padding-left: 3rem;"
+            <h1 style="
+              font-size: 60px;
+              letter-spacing: -.05em;
+              color: white;
+              text-align: left;
+              padding: 0 1.5rem;"
             >
-              <span style="
-                font-size: 28px;
-                letter-spacing: -.05em;
-                color: #999999;
-                text-align: left;
-                padding-bottom: 0.4rem"
-              >
-                Vinh Pham
-              </span>
-              <span style="
-                font-size: 60px;
-                letter-spacing: -.05em;
-                color: white;
-                text-align: left;"
-              >
-                ${title}
-              </span>
-            </div>
+              ${title}
+            </h1>
           </div>
         </div>
       </div>
