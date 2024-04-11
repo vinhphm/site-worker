@@ -70,7 +70,7 @@ const handler: ExportedHandler = {
 			height: 630,
 			fonts: [
 				{
-					name: 'Geist Sans',
+					name: 'Geist',
 					data: geist500,
 					style: 'normal',
 				},
