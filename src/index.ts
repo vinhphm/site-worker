@@ -21,14 +21,15 @@ const handler: ExportedHandler = {
       >
         <div style="
           display: flex;
-          align-items: flex-start;
-          justify-content: flex-start;
+          align-items: center;
+          justify-content: center;
           height: 100%;"
         >
           <div style="
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: center;
+            align-items: center;
             height: 100%;
             width: 100%;
             padding: 5rem;"
@@ -43,7 +44,7 @@ const handler: ExportedHandler = {
               font-size: 60px;
               letter-spacing: -.05em;
               color: white;
-              text-align: left;
+              text-align: center;
               padding: 0 1.5rem;"
             >
               ${title}
