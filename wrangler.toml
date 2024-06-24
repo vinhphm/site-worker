@@ -11,5 +11,8 @@ routes = [
   { pattern = "worker.vinh.dev/og*", zone_name = "vinh.dev" }
 ]
 
+[placement]
+mode = "smart"
+
 [triggers]
 crons = [ ]
