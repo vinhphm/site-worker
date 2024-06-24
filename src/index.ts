@@ -50,7 +50,7 @@ const handler: ExportedHandler = {
               letter-spacing: -.05em;
               color: white;
               text-align: center;
-              padding: 0 1.5rem;"
+              padding: 1em 1.5rem;"
             >
               ${title}
             </h1>
