@@ -5,14 +5,19 @@ const handler: ExportedHandler = {
 		const params = new URLSearchParams(new URL(request.url).search);
 		const title = params.get('title') || 'Lorem ipsum';
 
-    // @ts-ignore
+		// @ts-ignore
 		const geist500 = await env.WORKER_OG.get('geist500', 'arrayBuffer');
-    // @ts-ignore
+		// @ts-ignore
 		const ogIconBase64 = await env.WORKER_OG.get('ogIconBase64', 'text');
+		// @ts-ignore
+		const ogBackground = await env.WORKER_OG.get('ogBackground', 'text');
 
 		const html = `
       <div style="
-        background: #111010;
+        backgroundImage: url(${ogBackground});
+        backgroundRepeat: no-repeat;
+        backgroundPosition: center;
+        backgroundSize: 1200px 630px;
         height: 100%;
         width: 100%;
         display: flex;
@@ -34,7 +39,7 @@ const handler: ExportedHandler = {
             width: 100%;
             padding: 5rem;"
           >
-            
+
             <img
               height="92"
               width="92"
