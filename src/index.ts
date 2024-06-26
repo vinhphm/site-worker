@@ -3,7 +3,7 @@ import { ImageResponse } from 'workers-og';
 const handler: ExportedHandler = {
 	async fetch(request, env, ctx) {
 		const params = new URLSearchParams(new URL(request.url).search);
-		const title = params.get('title') || 'Lorem ipsum';
+		const title = params.get('title') || 'Vinh Pham';
 
 		// @ts-ignore
 		const geist500 = await env.WORKER_OG.get('geist500', 'arrayBuffer');
@@ -26,35 +26,37 @@ const handler: ExportedHandler = {
       >
         <div style="
           display: flex;
-          align-items: center;
+          flex-direction: column;
           justify-content: center;
-          height: 100%;"
+          align-items: flex-start;
+          height: 100%;
+          width: 100%;
+          padding: 5rem;"
         >
           <div style="
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            width: 100%;
-            padding: 5rem;"
+            justify-content: flex-start;"
           >
-
             <img
               height="92"
               width="92"
               src="data:image/png;base64,${ogIconBase64}"
             />
-            <h1 style="
-              font-size: 60px;
-              letter-spacing: -.05em;
-              color: white;
-              text-align: center;
-              padding: 1em 1.5rem;"
+            <span style="
+              width: 42px;
+              margin-left: 4px;
+              border-bottom: 8px solid white;"
             >
-              ${title}
-            </h1>
+            </span>
           </div>
+          <h1 style="
+            font-size: 60px;
+            letter-spacing: -.05em;
+            color: white;
+            padding: .25em 1.5rem 0 1.5rem;"
+          >
+            ${title}
+          </h1>
         </div>
       </div>
     `;
