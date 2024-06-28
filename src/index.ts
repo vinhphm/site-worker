@@ -8,7 +8,7 @@ const handler: ExportedHandler = {
 		// @ts-ignore
 		const geist500 = await env.WORKER_OG.get('geist500', 'arrayBuffer');
 		// @ts-ignore
-		const ogIconBase64 = await env.WORKER_OG.get('ogIconBase64', 'text');
+		const ogIcon = await env.WORKER_OG.get('ogIconSlashes', 'text');
 		// @ts-ignore
 		const ogBackground = await env.WORKER_OG.get('ogBackground', 'text');
 
@@ -40,7 +40,7 @@ const handler: ExportedHandler = {
             <img
               height="92"
               width="92"
-              src="data:image/png;base64,${ogIconBase64}"
+              src="data:image/png;base64,${ogIcon}"
             />
             <span style="
               width: 42px;
