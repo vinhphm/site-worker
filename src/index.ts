@@ -40,7 +40,7 @@ const handler: ExportedHandler = {
             <img
               height="92"
               width="92"
-              src="data:image/png;base64,${ogIcon}"
+              src="${ogIcon}"
             />
             <span style="
               width: 42px;
