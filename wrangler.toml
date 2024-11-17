@@ -16,3 +16,6 @@ mode = "smart"
 
 [triggers]
 crons = [ ]
+
+[observability]
+enabled = true

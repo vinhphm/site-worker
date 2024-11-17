@@ -6,7 +6,7 @@ const handler: ExportedHandler = {
 		const title = params.get('title') || 'Vinh Pham';
 
 		// @ts-ignore
-		const geist500 = await env.WORKER_OG.get('geist500', 'arrayBuffer');
+		const geist600 = await env.WORKER_OG.get('geist600', 'arrayBuffer');
 		// @ts-ignore
 		const logo = await env.WORKER_OG.get('logo', 'text');
 		// @ts-ignore
@@ -14,7 +14,7 @@ const handler: ExportedHandler = {
 
 		const html = `
       <div style="
-        backgroundImage: url(${ogBackground});
+        backgroundImage: linear-gradient(to top, #e8cbc0, #636fa4);
         backgroundRepeat: no-repeat;
         backgroundPosition: center;
         backgroundSize: 1200px 630px;
@@ -67,7 +67,7 @@ const handler: ExportedHandler = {
 			fonts: [
 				{
 					name: 'Geist',
-					data: geist500,
+					data: geist600,
 					style: 'normal',
 				},
 			],
