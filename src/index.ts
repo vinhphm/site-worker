@@ -3,10 +3,10 @@ import { ImageResponse } from 'workers-og';
 const handler: ExportedHandler = {
 	async fetch(request, env, ctx) {
 		const params = new URLSearchParams(new URL(request.url).search);
-		const title = params.get('title') || 'Vinh Pham';
+		const title = params.get('title') || 'vinh.dev';
 
 		// @ts-ignore
-		const geist600 = await env.WORKER_OG.get('geist600', 'arrayBuffer');
+		const inter600 = await env.WORKER_OG.get('inter600', 'arrayBuffer');
 		// @ts-ignore
 		const logo = await env.WORKER_OG.get('logo', 'text');
 		// @ts-ignore
@@ -66,8 +66,8 @@ const handler: ExportedHandler = {
 			height: 630,
 			fonts: [
 				{
-					name: 'Geist',
-					data: geist600,
+					name: 'Inter',
+					data: inter600,
 					style: 'normal',
 				},
 			],
