@@ -14,9 +14,7 @@ const handler: ExportedHandler = {
 
 		const html = `
       <div style="
-        backgroundImage: linear-gradient(to top, #e8cbc0, #636fa4);
-        backgroundRepeat: no-repeat;
-        backgroundPosition: center;
+        backgroundColor: #292929;
         backgroundSize: 1200px 630px;
         height: 100%;
         width: 100%;
@@ -35,19 +33,23 @@ const handler: ExportedHandler = {
         >
           <div style="
             display: flex;
-            justify-content: flex-start;"
+            justify-content: flex-start;
+            align-items: center;"
           >
+            <span style="
+              font-size: 60px;
+              letter-spacing: -.05em;
+              color: #d6d6d6;
+              padding: .25em 1.5rem 0 1.5rem;"
+            >
+              vinh.dev
+            </span>
             <img
-              height="92"
-              width="92"
+              style="marginLeft: 0.5rem;"
+              height="74"
+              width="74"
               src="${logo}"
             />
-            <span style="
-              width: 42px;
-              margin-left: 4px;
-              border-bottom: 8px solid white;"
-            >
-            </span>
           </div>
           <h1 style="
             font-size: 60px;
