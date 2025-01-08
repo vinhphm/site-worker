@@ -45,9 +45,9 @@ const handler: ExportedHandler = {
               vinh.dev
             </span>
             <img
-              style="marginLeft: 0.5rem;"
-              height="74"
-              width="74"
+              style="marginLeft: 0.25rem;"
+              height="48"
+              width="48"
               src="${logo}"
             />
           </div>
