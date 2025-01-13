@@ -2,11 +2,9 @@ name = "vinh-dev-workers"
 main = "src/index.ts"
 compatibility_date = "2024-11-06"
 compatibility_flags = [ "nodejs_compat_v2" ]
-assets = { directory = "public",  binding = "ASSETS" }
+assets = { directory = "public", binding = "ASSETS" }
 minify = true
-routes = [
-  { pattern = "workers.vinh.dev/*", zone_name = "vinh.dev" }
-]
+routes = [ { pattern = "workers.vinh.dev/*", zone_name = "vinh.dev" } ]
+
 [build]
 watch_dir = "public"
-

@@ -1,16 +1,17 @@
 {
   "compilerOptions": {
-    "target": "ESNext", // ECMAScript target version
+    "target": "ESNext",
+    "jsx": "react-jsx", // ECMAScript target version
     "lib": [
-      "ESNext", // Standard library to use
+      "ESNext" // Standard library to use
       // "DOM.Iterable",
       // "DOM",
     ],
-    "moduleDetection": "force",
-    "jsx": "react-jsx", // JSX compilation style
+    "moduleDetection": "force", // JSX compilation style
     // "jsxImportSource": "hono/jsx",
     "module": "ESNext", // Module code generation method
-    "moduleResolution": "bundler", // How to resolve modules
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true, // How to resolve modules
     "types": [
       // "./.wrangler/types/runtime", // Cloudflare Workers runtime types
       // "@cloudflare/workers-types", // Cloudflare Workers API types
@@ -18,22 +19,21 @@
       "bun-types", // Bun runtime types
       "hono", // Hono framework types
       "@cloudflare/workers-types/2023-07-01"
-    ],
-    "resolveJsonModule": true, // Enable importing .json files
-    "esModuleInterop": true, // Allow default imports for CommonJS modules
+    ], // Allow default imports for CommonJS modules
     "allowJs": true, // Allow importing `.js` from `.ts`
-    "checkJs": false, // Don't type-check .js files
-    "noEmit": true, // Don't output files
-    "isolatedModules": true, // Ensure each file can be safely transpiled
-    "allowSyntheticDefaultImports": true, // Allow 'import x from y' when module has no default export
-    "forceConsistentCasingInFileNames": true, // Ensure consistent casing in file names
-    "strict": true, // Enable all strict type checking options
-    "skipLibCheck": true, // Skip type checking of declaration files
+    "checkJs": false, // Ensure consistent casing in file names
+    "strict": true, // Skip type checking of declaration files
     "noFallthroughCasesInSwitch": true,
+    "noPropertyAccessFromIndexSignature": false,
     // Some stricter flags (disabled by default)
     "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noPropertyAccessFromIndexSignature": false
+    "noUnusedParameters": false, // Don't type-check .js files
+    "noEmit": true, // Ensure each file can be safely transpiled
+    "allowSyntheticDefaultImports": true, // Enable importing .json files
+    "esModuleInterop": true, // Allow 'import x from y' when module has no default export
+    "forceConsistentCasingInFileNames": true, // Don't output files
+    "isolatedModules": true, // Enable all strict type checking options
+    "skipLibCheck": true
   },
   "baseUrl": "./", // Base directory for resolving non-relative module names
   "paths": {
