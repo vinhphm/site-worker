@@ -1,31 +1,5 @@
 import { Hono } from 'hono'
 
-interface OEmbedEndpoint {
-  url: string
-  schemes?: string[]
-  formats?: string[]
-}
-
-interface OEmbedProvider {
-  provider_name: string
-  provider_url: string
-  endpoints: OEmbedEndpoint[]
-}
-
-interface ProviderInfo {
-  name: string
-  endpoint: string
-  formats: string[]
-}
-
-interface OEmbedOptions {
-  maxwidth?: string
-  maxheight?: string
-  format?: string
-  theme?: string
-  lang?: string
-}
-
 // Cache for providers list
 let providersCache: any = null
 let providersCacheTime = 0
