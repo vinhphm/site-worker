@@ -1,17 +1,27 @@
 {
-  "name": "og-worker",
-  "version": "0.0.2",
-  "private": true,
+  "name": "vinh-dev-workers",
+  "module": "index.ts",
+  "version": "1.0.0",
+  "type": "module",
   "scripts": {
-    "deploy": "wrangler deploy",
-    "start": "wrangler dev"
+    "dev": "wrangler dev src/index.ts",
+    "deploy": "wrangler deploy --minify src/index.ts"
+  },
+  "dependencies": {
+    "@cloudflare/pages-plugin-vercel-og": "^0.1.2",
+    "autoprefixer": "^10.4.20",
+    "hono": "^4.6.16",
+    "postcss-cli": "^11.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwindcss": "^3.4.17"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250109.0",
-    "typescript": "^5.7.3",
-    "wrangler": "^3.101.0"
-  },
-  "dependencies": {
-    "workers-og": "^0.0.25"
+    "wrangler": "^3.101.0",
+    "@types/bun": "latest",
+    "@types/react": "^19.0.6",
+    "@types/react-dom": "^19.0.3",
+    "@vercel/og": "^1.0.0"
   }
 }

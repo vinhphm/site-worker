@@ -1,22 +1,12 @@
-name = "og"
+name = "vinh-dev-workers"
 main = "src/index.ts"
-compatibility_flags = [ "nodejs_compat" ]
-compatibility_date = "2024-11-11"
-env = { }
-
-kv_namespaces = [
-  { binding = "WORKER_OG", id = "bdf583f7be3f4bc08416bff357caec5f" }
-]
-
+compatibility_date = "2024-11-06"
+compatibility_flags = [ "nodejs_compat_v2" ]
+assets = { directory = "public",  binding = "ASSETS" }
+minify = true
 routes = [
-  { pattern = "workers.vinh.dev/og*", zone_name = "vinh.dev" }
+  { pattern = "workers.vinh.dev/*", zone_name = "vinh.dev" }
 ]
+[build]
+watch_dir = "public"
 
-[placement]
-mode = "smart"
-
-[triggers]
-crons = [ ]
-
-[observability]
-enabled = true
