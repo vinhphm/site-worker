@@ -18,7 +18,7 @@ const app = new Hono()
     }),
   )
   .get('/', (c) => {
-    return c.text('Hello from vinh.dev Workers!')
+    return c.redirect('https://vinh.dev')
   })
   .route('og', og)
   .route('oembed', oembed)
