@@ -8,3 +8,7 @@ routes = [ { pattern = "workers.vinh.dev/*", zone_name = "vinh.dev" } ]
 
 [build]
 watch_dir = "public"
+
+[observability]
+enabled = true
+head_sampling_rate = 1
