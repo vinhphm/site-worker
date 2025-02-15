@@ -2,7 +2,7 @@
   "name": "vinh-dev-workers",
   "type": "module",
   "version": "1.0.0",
-  "packageManager": "bun@1.1.43",
+  "packageManager": "bun@1.2.2",
   "module": "index.ts",
   "scripts": {
     "prepare": "simple-git-hooks",
@@ -14,24 +14,24 @@
   "dependencies": {
     "@cloudflare/pages-plugin-vercel-og": "^0.1.2",
     "autoprefixer": "^10.4.20",
-    "hono": "^4.6.16",
+    "hono": "^4.7.1",
     "postcss-cli": "^11.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "tailwindcss": "^3.4.17"
+    "tailwindcss": "^4.0.6"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^3.14.0",
-    "@cloudflare/workers-types": "^4.20250109.0",
-    "@types/bun": "latest",
-    "@types/react": "^19.0.6",
+    "@antfu/eslint-config": "^4.2.0",
+    "@cloudflare/workers-types": "^4.20250214.0",
+    "@types/bun": "^1.2.2",
+    "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
-    "@vercel/og": "^1.0.0",
-    "eslint": "^9.18.0",
+    "@vercel/og": "^0.6.5",
+    "eslint": "^9.20.1",
     "eslint-plugin-format": "^1.0.1",
     "simple-git": "^3.27.0",
     "simple-git-hooks": "^2.11.1",
-    "wrangler": "^3.101.0"
+    "wrangler": "^3.109.1"
   },
   "simple-git-hooks": {
     "pre-commit": "bunx lint-staged"
