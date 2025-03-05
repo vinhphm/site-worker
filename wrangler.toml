@@ -12,3 +12,6 @@ watch_dir = "public"
 [observability]
 enabled = true
 head_sampling_rate = 1
+
+[vars]
+SITE_URL = "https://vinh.dev"
