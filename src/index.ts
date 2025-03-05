@@ -4,7 +4,7 @@ import { logger } from 'hono/logger'
 import oembed from './oembed'
 import og from './og'
 
-const app = new Hono()
+const app = new Hono<{ Bindings: Env }>()
   .use('*', logger())
   .use(
     '*',
@@ -18,7 +18,7 @@ const app = new Hono()
     }),
   )
   .get('/', (c) => {
-    return c.redirect('https://vinh.dev')
+    return c.redirect(c.env.SITE_URL)
   })
   .route('og', og)
   .route('oembed', oembed)

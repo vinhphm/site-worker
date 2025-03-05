@@ -2,6 +2,10 @@ interface CacheStorage {
   default: Cache
 }
 
+interface Env {
+  SITE_URL: string
+}
+
 interface OEmbedEndpoint {
   url: string
   schemes?: string[]

@@ -5,22 +5,22 @@ let providersCache: any = null
 let providersCacheTime = 0
 const CACHE_DURATION = 24 * 60 * 60 * 1000 // 24 hours
 
-const ALLOWED_ORIGINS = [
-  'https://vinh.dev',
-  'http://localhost:4321',
-]
+function isOriginAllowed(request: Request, env: Env) {
+  const ALLOWED_ORIGINS = [
+    env.SITE_URL,
+    'http://localhost:4321',
+  ]
 
-function isOriginAllowed(request: Request) {
   const origin = request.headers.get('Origin')
   if (!origin)
     return false
   return ALLOWED_ORIGINS.some(allowed => origin.startsWith(allowed))
 }
 
-function corsHeaders(request: Request) {
+function corsHeaders(request: Request, env: Env) {
   const origin = request.headers.get('Origin')
   // Only return specific origin if it's allowed, otherwise no CORS headers
-  return isOriginAllowed(request)
+  return isOriginAllowed(request, env)
     ? {
         'Access-Control-Allow-Origin': origin!,
         'Access-Control-Allow-Methods': 'GET, OPTIONS',
@@ -111,11 +111,11 @@ async function fetchOembedData(
   return response.json()
 }
 
-const app = new Hono()
+const app = new Hono<{ Bindings: Env }>()
 
 export default app.get('/', async (c) => {
   // Check if origin is allowed
-  if (!isOriginAllowed(c.req.raw)) {
+  if (!isOriginAllowed(c.req.raw, c.env)) {
     return c.json({ error: 'Forbidden' }, 403)
   }
 
@@ -159,7 +159,7 @@ export default app.get('/', async (c) => {
       'X-Provider': provider.name,
     }
 
-    const cors = corsHeaders(c.req.raw)
+    const cors = corsHeaders(c.req.raw, c.env)
     for (const [key, value] of Object.entries(cors)) {
       headers[key] = value
     }
