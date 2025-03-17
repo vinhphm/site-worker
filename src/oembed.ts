@@ -9,16 +9,17 @@ function isOriginAllowed(request: Request, env: Env) {
   const ALLOWED_ORIGINS = [
     env.SITE_URL,
     'http://localhost:4321',
+    'http://127.0.0.1:4321',
   ]
 
-  const origin = request.headers.get('Origin')
+  const origin = (request.headers as any).get('Origin')
   if (!origin)
     return false
   return ALLOWED_ORIGINS.some(allowed => origin.startsWith(allowed))
 }
 
 function corsHeaders(request: Request, env: Env) {
-  const origin = request.headers.get('Origin')
+  const origin = (request.headers as any).get('Origin')
   // Only return specific origin if it's allowed, otherwise no CORS headers
   return isOriginAllowed(request, env)
     ? {

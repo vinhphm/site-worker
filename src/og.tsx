@@ -3,7 +3,7 @@ import { Hono } from 'hono'
 import { getLocalFonts } from './getFonts'
 import { loadImage } from './loadImage'
 
-const app = new Hono()
+const app = new Hono<{ Bindings: Env }>()
 
 export default app.get('/', async (c) => {
   try {
