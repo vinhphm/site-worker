@@ -8,9 +8,15 @@
       // "DOM",
     ],
     "moduleDetection": "force", // JSX compilation style
+    "baseUrl": "./",
     // "jsxImportSource": "hono/jsx",
     "module": "ESNext", // Module code generation method
     "moduleResolution": "bundler",
+    "paths": {
+      "@/*": [ // Path alias configuration
+        "./src/*"
+      ]
+    },
     "resolveJsonModule": true, // How to resolve modules
     "types": [
       // "./.wrangler/types/runtime", // Cloudflare Workers runtime types
@@ -34,11 +40,5 @@
     "forceConsistentCasingInFileNames": true, // Don't output files
     "isolatedModules": true, // Enable all strict type checking options
     "skipLibCheck": true
-  },
-  "baseUrl": "./", // Base directory for resolving non-relative module names
-  "paths": {
-    "@/*": [ // Path alias configuration
-      "./src/*"
-    ]
   }
 }
