@@ -1,0 +1,27 @@
+{
+  "name": "site-worker",
+  "main": "./src/index.ts",
+  "compatibility_date": "2025-04-01",
+  "compatibility_flags": ["nodejs_compat_v2"],
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS"
+  },
+  "minify": true,
+  "routes": [
+    {
+      "pattern": "worker.vinh.dev/*",
+      "zone_name": "vinh.dev"
+    }
+  ],
+  "build": {
+    "watch_dir": "./public"
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "vars": {
+    "SITE_URL": "https://vinh.dev"
+  }
+}
