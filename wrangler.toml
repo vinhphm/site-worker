@@ -1,6 +1,6 @@
-name = "vinh-dev-worker"
+name = "site-worker"
 main = "src/index.ts"
-compatibility_date = "2024-11-11"
+compatibility_date = "2025-04-01"
 compatibility_flags = [ "nodejs_compat_v2" ]
 assets = { directory = "public", binding = "ASSETS" }
 minify = true
