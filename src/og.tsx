@@ -65,7 +65,7 @@ export default app.get('/', async (c) => {
 
         return (
           <div style={{
-            backgroundColor: '#292929',
+            backgroundColor: '#18181b',
             backgroundSize: '1200px 630px',
             height: '100%',
             width: '100%',
@@ -93,7 +93,7 @@ export default app.get('/', async (c) => {
                 <span style={{
                   fontSize: '60px',
                   letterSpacing: '-.05em',
-                  color: '#d6d6d6',
+                  color: '71717a',
                   padding: '0.125em 1.5rem 0 1.5rem',
                 }}
                 >

@@ -19,12 +19,8 @@
     },
     "resolveJsonModule": true, // How to resolve modules
     "types": [
-      // "./.wrangler/types/runtime", // Cloudflare Workers runtime types
-      // "@cloudflare/workers-types", // Cloudflare Workers API types
-      // "./runtime.d.ts"
       "bun-types", // Bun runtime types
-      "hono", // Hono framework types
-      "@cloudflare/workers-types/2023-07-01"
+      "hono" // Hono framework types
     ], // Allow default imports for CommonJS modules
     "allowJs": true, // Allow importing `.js` from `.ts`
     "checkJs": false, // Ensure consistent casing in file names
