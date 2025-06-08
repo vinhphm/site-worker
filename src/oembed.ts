@@ -14,19 +14,49 @@ function isOriginAllowed(request: Request, env: Env) {
   ]
 
   const origin = (request.headers as any).get('Origin')
+  const referer = (request.headers as any).get('Referer')
+
   if (!origin)
     return false
 
   return ALLOWED_ORIGINS.some((allowed) => {
-    // If the allowed origin contains wildcards, use regex matching
-    if (allowed.includes('*')) {
+    let allowedOrigin = allowed
+    let allowedPath = ''
+
+    try {
+      const url = new URL(allowed)
+      allowedOrigin = url.origin
+      allowedPath = url.pathname
+    } catch {}
+
+    let originMatches = false
+    if (allowedOrigin.includes('*')) {
       const pattern = new RegExp(
-        `^${allowed.replace(/\*/g, '.*').replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\\\.\\\*/g, '.*')}$`,
+        `^${allowedOrigin.replace(/\*/g, '.*').replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\\\.\\\*/g, '.*')}$`,
       )
-      return pattern.test(origin)
+      originMatches = pattern.test(origin)
+    } else {
+      originMatches = origin === allowedOrigin
     }
-    // Otherwise use prefix matching for backward compatibility
-    return origin.startsWith(allowed)
+
+    if (!originMatches) {
+      return false
+    }
+
+    if (allowedPath && allowedPath !== '/') {
+      if (!referer) {
+        return false
+      }
+
+      try {
+        const refererUrl = new URL(referer)
+        return refererUrl.pathname.startsWith(allowedPath)
+      } catch {
+        return false
+      }
+    }
+
+    return true
   })
 }
 
