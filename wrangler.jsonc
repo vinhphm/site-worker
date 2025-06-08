@@ -23,6 +23,6 @@
   },
   "vars": {
     "SITE_URL": "https://vinh.dev",
-    "SITE_PREVIEW_URL": "https://*-site.vrelic.workers.dev/*"
+    "SITE_PREVIEW_URL": "https://*-site.vrelic.workers.dev"
   }
 }
