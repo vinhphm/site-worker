@@ -20,14 +20,15 @@ function isOriginAllowed(request: Request, env: Env) {
   return ALLOWED_ORIGINS.some((allowed) => {
     // If the allowed origin contains wildcards, use regex matching
     if (allowed.includes('*')) {
-      // First escape all special regex characters except asterisks
-      const escaped = allowed.replace(/[.+?^${}()|[\]\\]/g, '\\$&')
+      // Escape special regex characters except asterisks, but handle dots carefully
+      // We want to escape dots to match literal dots in URLs
+      const escaped = allowed.replace(/[+?^${}()|[\]\\]/g, '\\$&').replace(/\./g, '\\.')
       // Then replace asterisks with .*
       const pattern = new RegExp(`^${escaped.replace(/\*/g, '.*')}$`)
       return pattern.test(origin)
     }
-    // Otherwise use prefix matching for backward compatibility
-    return origin.startsWith(allowed)
+    // Use exact matching instead of prefix matching
+    return origin === allowed
   })
 }
 
