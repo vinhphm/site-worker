@@ -8,6 +8,7 @@ const CACHE_DURATION = 24 * 60 * 60 * 1000 // 24 hours
 function isOriginAllowed(request: Request, env: Env) {
   const ALLOWED_ORIGINS = [
     env.SITE_URL,
+    env.SITE_PREVIEW_URL,
     'http://localhost:4321',
     'http://127.0.0.1:4321',
   ]
@@ -15,7 +16,18 @@ function isOriginAllowed(request: Request, env: Env) {
   const origin = (request.headers as any).get('Origin')
   if (!origin)
     return false
-  return ALLOWED_ORIGINS.some(allowed => origin.startsWith(allowed))
+
+  return ALLOWED_ORIGINS.some((allowed) => {
+    // If the allowed origin contains wildcards, use regex matching
+    if (allowed.includes('*')) {
+      const pattern = new RegExp(
+        `^${allowed.replace(/\*/g, '.*').replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\\\.\\\*/g, '.*')}$`,
+      )
+      return pattern.test(origin)
+    }
+    // Otherwise use prefix matching for backward compatibility
+    return origin.startsWith(allowed)
+  })
 }
 
 function corsHeaders(request: Request, env: Env) {

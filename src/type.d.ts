@@ -4,6 +4,7 @@ interface CacheStorage {
 
 interface Env {
   SITE_URL: string
+  SITE_PREVIEW_URL: string
 }
 
 interface OEmbedEndpoint {
