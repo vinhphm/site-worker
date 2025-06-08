@@ -21,6 +21,7 @@ export default antfu(
       'ts/ban-types': 'off',
       'ts/no-invalid-this': 'off',
       'ts/no-unnecessary-type-constraint': 'off',
+      'no-console': 'off',
     },
   },
 )

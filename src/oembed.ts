@@ -17,6 +17,8 @@ function isOriginAllowed(request: Request, env: Env) {
   if (!origin)
     return false
 
+  console.log('Checking origin:', origin)
+
   return ALLOWED_ORIGINS.some((allowed) => {
     // If the allowed origin contains wildcards, use regex matching
     if (allowed.includes('*')) {
