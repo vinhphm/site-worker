@@ -65,7 +65,7 @@ export default app.get('/', async (c) => {
 
         return (
           <div style={{
-            backgroundColor: '#18181b',
+            backgroundColor: '#F0EFEA',
             backgroundSize: '1200px 630px',
             height: '100%',
             width: '100%',
@@ -91,9 +91,9 @@ export default app.get('/', async (c) => {
               }}
               >
                 <span style={{
-                  fontSize: '60px',
+                  fontSize: '48px',
                   letterSpacing: '-.05em',
-                  color: '71717a',
+                  color: '#717170',
                   padding: '0.125em 1.5rem 0 1.5rem',
                 }}
                 >
@@ -103,16 +103,16 @@ export default app.get('/', async (c) => {
                   <img
                     src={logo}
                     alt="vinh.dev"
-                    style={{ marginLeft: '0.25rem' }}
-                    height="48"
-                    width="48"
+                    style={{ marginLeft: '0.1rem' }}
+                    height="40"
+                    width="40"
                   />
                 )}
               </div>
               <h1 style={{
                 fontSize: '60px',
                 letterSpacing: '-.05em',
-                color: 'white',
+                color: '#141412',
                 padding: '.25em 1.5rem 0 1.5rem',
               }}
               >
