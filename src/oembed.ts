@@ -1,48 +1,10 @@
 import { Hono } from 'hono'
+import { cors } from 'hono/cors'
 
 // Cache for providers list
 let providersCache: any = null
 let providersCacheTime = 0
 const CACHE_DURATION = 24 * 60 * 60 * 1000 // 24 hours
-
-function isOriginAllowed(request: Request, env: Env) {
-  const ALLOWED_ORIGINS = [
-    env.SITE_URL,
-    env.SITE_PREVIEW_URL,
-    'http://localhost:4321',
-    'http://127.0.0.1:4321',
-  ]
-
-  const origin = (request.headers as any).get('Origin')
-  if (!origin)
-    return false
-
-  return ALLOWED_ORIGINS.some((allowed) => {
-    // If the allowed origin contains wildcards, use regex matching
-    if (allowed.includes('*')) {
-      // Escape all special regex characters except asterisks
-      const escaped = allowed.replace(/[.+?^${}()|[\]\\-]/g, '\\$&')
-      // Then replace asterisks with .*
-      const pattern = new RegExp(`^${escaped.replace(/\*/g, '.*')}$`)
-      return pattern.test(origin)
-    }
-    // Use exact matching instead of prefix matching
-    return origin === allowed
-  })
-}
-
-function corsHeaders(request: Request, env: Env) {
-  const origin = (request.headers as any).get('Origin')
-  // Only return specific origin if it's allowed, otherwise no CORS headers
-  return isOriginAllowed(request, env)
-    ? {
-        'Access-Control-Allow-Origin': origin!,
-        'Access-Control-Allow-Methods': 'GET, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Max-Age': '86400',
-      }
-    : {}
-}
 
 async function getProviders() {
   // Return cached providers if available and not expired
@@ -127,12 +89,41 @@ async function fetchOembedData(
 
 const app = new Hono<{ Bindings: Env }>()
 
-export default app.get('/', async (c) => {
-  // Check if origin is allowed
-  if (!isOriginAllowed(c.req.raw, c.env)) {
-    return c.json({ error: 'Forbidden' }, 403)
-  }
+// Configure CORS middleware for the oembed endpoint
+app.use('/*', cors({
+  origin: (origin, c) => {
+    const env = c.env
+    const ALLOWED_ORIGINS = [
+      env.SITE_URL,
+      env.SITE_PREVIEW_URL,
+      'http://localhost:4321',
+      'http://127.0.0.1:4321',
+    ]
 
+    if (!origin)
+      return null
+
+    const isAllowed = ALLOWED_ORIGINS.some((allowed) => {
+      // If the allowed origin contains wildcards, use regex matching
+      if (allowed.includes('*')) {
+        // Escape all special regex characters except asterisks
+        const escaped = allowed.replace(/[.+?^${}()|[\]\\-]/g, '\\$&')
+        // Then replace asterisks with .*
+        const pattern = new RegExp(`^${escaped.replace(/\*/g, '.*')}$`)
+        return pattern.test(origin)
+      }
+      // Use exact matching instead of prefix matching
+      return origin === allowed
+    })
+
+    return isAllowed ? origin : null
+  },
+  allowMethods: ['GET', 'OPTIONS'],
+  allowHeaders: ['Content-Type'],
+  maxAge: 86400,
+}))
+
+export default app.get('/', async (c) => {
   // Parse URL and get parameters
   const targetUrl = c.req.query('url')
 
@@ -171,11 +162,6 @@ export default app.get('/', async (c) => {
       'Content-Type': 'application/json',
       'Cache-Control': 'public, max-age=3600',
       'X-Provider': provider.name,
-    }
-
-    const cors = corsHeaders(c.req.raw, c.env)
-    for (const [key, value] of Object.entries(cors)) {
-      headers[key] = value
     }
 
     return new Response(JSON.stringify(data), {

@@ -14,23 +14,23 @@
   "dependencies": {
     "@cloudflare/pages-plugin-vercel-og": "^0.1.2",
     "autoprefixer": "^10.4.21",
-    "hono": "^4.7.11",
+    "hono": "^4.8.0",
     "postcss-cli": "^11.0.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "tailwindcss": "^4.1.8"
+    "tailwindcss": "^4.1.10"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.14.1",
-    "@types/bun": "^1.2.15",
-    "@types/react": "^19.1.6",
+    "@types/bun": "^1.2.16",
+    "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vercel/og": "^0.6.8",
-    "eslint": "^9.28.0",
+    "eslint": "^9.29.0",
     "eslint-plugin-format": "^1.0.1",
     "simple-git": "^3.28.0",
     "simple-git-hooks": "^2.13.0",
-    "wrangler": "^4.19.1"
+    "wrangler": "^4.20.1"
   },
   "simple-git-hooks": {
     "pre-commit": "bunx lint-staged"
