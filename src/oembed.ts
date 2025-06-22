@@ -96,6 +96,7 @@ app.use('/*', cors({
     const ALLOWED_ORIGINS = [
       env.SITE_URL,
       env.SITE_PREVIEW_URL,
+      'https://vinh.dev',
       'http://localhost:4321',
       'http://127.0.0.1:4321',
     ]
