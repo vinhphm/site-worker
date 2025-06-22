@@ -1,5 +1,4 @@
 import { Hono } from 'hono'
-import { cors } from 'hono/cors'
 
 // Cache for providers list
 let providersCache: any = null
@@ -88,40 +87,6 @@ async function fetchOembedData(
 }
 
 const app = new Hono<{ Bindings: Env }>()
-
-// Configure CORS middleware for the oembed endpoint
-app.use('/*', cors({
-  origin: (origin, c) => {
-    const env = c.env
-    const ALLOWED_ORIGINS = [
-      env.SITE_URL,
-      env.SITE_PREVIEW_URL,
-      'http://localhost:4321',
-      'http://127.0.0.1:4321',
-    ]
-
-    if (!origin)
-      return null
-
-    const isAllowed = ALLOWED_ORIGINS.some((allowed) => {
-      // If the allowed origin contains wildcards, use regex matching
-      if (allowed.includes('*')) {
-        // Escape all special regex characters except asterisks
-        const escaped = allowed.replace(/[.+?^${}()|[\]\\-]/g, '\\$&')
-        // Then replace asterisks with .*
-        const pattern = new RegExp(`^${escaped.replace(/\*/g, '.*')}$`)
-        return pattern.test(origin)
-      }
-      // Use exact matching instead of prefix matching
-      return origin === allowed
-    })
-
-    return isAllowed ? origin : null
-  },
-  allowMethods: ['GET', 'OPTIONS'],
-  allowHeaders: ['Content-Type'],
-  maxAge: 86400,
-}))
 
 export default app.get('/', async (c) => {
   // Parse URL and get parameters
