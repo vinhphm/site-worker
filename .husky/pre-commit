@@ -1,1 +1,1 @@
-bun test
+npx ultracite format
