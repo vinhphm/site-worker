@@ -1,6 +1,9 @@
 import type { Context } from 'hono'
 
-export async function loadImage(c: Context, imagePath: string): Promise<string | null> {
+export async function loadImage(
+  c: Context,
+  imagePath: string
+): Promise<string | null> {
   try {
     if (!c.env?.ASSETS) {
       throw new Error('ASSETS binding is not configured')

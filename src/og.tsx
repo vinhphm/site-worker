@@ -64,57 +64,62 @@ export default app.get('/', async (c) => {
         const logo = await loadImage(c, '/images/logo.png')
 
         return (
-          <div style={{
-            backgroundColor: '#F0EFEA',
-            backgroundSize: '1200px 630px',
-            height: '100%',
-            width: '100%',
-            display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'flex-start',
-          }}
-          >
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'flex-start',
+          <div
+            style={{
+              backgroundColor: '#F0EFEA',
+              backgroundSize: '1200px 630px',
               height: '100%',
               width: '100%',
-              padding: '5rem',
+              display: 'flex',
+              alignItems: 'flex-start',
+              justifyContent: 'flex-start',
             }}
-            >
-              <div style={{
+          >
+            <div
+              style={{
                 display: 'flex',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'flex-start',
+                height: '100%',
+                width: '100%',
+                padding: '5rem',
               }}
-              >
-                <span style={{
-                  fontSize: '48px',
-                  letterSpacing: '-.05em',
-                  color: '#717170',
-                  padding: '0.125em 1.5rem 0 1.5rem',
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'flex-start',
+                  alignItems: 'center',
                 }}
+              >
+                <span
+                  style={{
+                    fontSize: '48px',
+                    letterSpacing: '-.05em',
+                    color: '#717170',
+                    padding: '0.125em 1.5rem 0 1.5rem',
+                  }}
                 >
                   vinh.dev
                 </span>
                 {logo && (
                   <img
-                    src={logo}
                     alt="vinh.dev"
-                    style={{ marginLeft: '0.1rem' }}
                     height="40"
+                    src={logo}
+                    style={{ marginLeft: '0.1rem' }}
                     width="40"
                   />
                 )}
               </div>
-              <h1 style={{
-                fontSize: '60px',
-                letterSpacing: '-.05em',
-                color: '#141412',
-                padding: '.25em 1.5rem 0 1.5rem',
-              }}
+              <h1
+                style={{
+                  fontSize: '60px',
+                  letterSpacing: '-.05em',
+                  color: '#141412',
+                  padding: '.25em 1.5rem 0 1.5rem',
+                }}
               >
                 {title}
               </h1>
@@ -134,6 +139,9 @@ export default app.get('/', async (c) => {
     })
   } catch (error: any) {
     console.error('OG Image generation error:', error)
-    return c.json({ error: 'Failed to generate image', details: error.message }, 500)
+    return c.json(
+      { error: 'Failed to generate image', details: error.message },
+      500
+    )
   }
 })

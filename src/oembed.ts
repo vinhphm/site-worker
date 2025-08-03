@@ -7,7 +7,7 @@ const CACHE_DURATION = 24 * 60 * 60 * 1000 // 24 hours
 
 async function getProviders() {
   // Return cached providers if available and not expired
-  if (providersCache && (Date.now() - providersCacheTime < CACHE_DURATION)) {
+  if (providersCache && Date.now() - providersCacheTime < CACHE_DURATION) {
     return providersCache
   }
 
@@ -34,7 +34,7 @@ function findProvider(url: string, providers: OEmbedProvider[]) {
     for (const endpoint of provider.endpoints) {
       for (const scheme of endpoint.schemes || []) {
         const pattern = new RegExp(
-          `^${scheme.replace(/\*/g, '.*').replace(/\?/g, '\\?')}$`,
+          `^${scheme.replace(/\*/g, '.*').replace(/\?/g, '\\?')}$`
         )
         if (pattern.test(url)) {
           return {
@@ -61,13 +61,15 @@ function findProvider(url: string, providers: OEmbedProvider[]) {
 async function fetchOembedData(
   provider: ProviderInfo,
   targetUrl: string,
-  options: OEmbedOptions = {},
+  options: OEmbedOptions = {}
 ) {
   const embedUrl = new URL(provider.endpoint)
   embedUrl.searchParams.set('url', targetUrl)
 
   // Set format preference (prefer json if available)
-  const format = provider.formats.includes('json') ? 'json' : provider.formats[0]
+  const format = provider.formats.includes('json')
+    ? 'json'
+    : provider.formats[0]
   embedUrl.searchParams.set('format', format)
 
   // Add additional parameters if provided
@@ -104,10 +106,13 @@ export default app.get('/', async (c) => {
     const provider = findProvider(targetUrl, providers)
 
     if (!provider) {
-      return c.json({
-        error: 'Unsupported URL format',
-        message: 'No oEmbed provider found for this URL',
-      }, 400)
+      return c.json(
+        {
+          error: 'Unsupported URL format',
+          message: 'No oEmbed provider found for this URL',
+        },
+        400
+      )
     }
 
     // Get additional options from query parameters
@@ -135,9 +140,12 @@ export default app.get('/', async (c) => {
   } catch (error: any) {
     console.error('Error:', error)
 
-    return c.json({
-      error: 'Error processing request',
-      message: error.message,
-    }, 500)
+    return c.json(
+      {
+        error: 'Error processing request',
+        message: error.message,
+      },
+      500
+    )
   }
 })
