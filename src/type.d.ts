@@ -1,31 +1,31 @@
-interface CacheStorage {
+type CacheStorage = {
   default: Cache
 }
 
-interface Env {
+type Env = {
   SITE_URL: string
   SITE_PREVIEW_URL: string
 }
 
-interface OEmbedEndpoint {
+type OEmbedEndpoint = {
   url: string
   schemes?: string[]
   formats?: string[]
 }
 
-interface OEmbedProvider {
+type OEmbedProvider = {
   provider_name: string
   provider_url: string
   endpoints: OEmbedEndpoint[]
 }
 
-interface ProviderInfo {
+type ProviderInfo = {
   name: string
   endpoint: string
   formats: string[]
 }
 
-interface OEmbedOptions {
+type OEmbedOptions = {
   maxwidth?: string
   maxheight?: string
   format?: string
@@ -33,24 +33,24 @@ interface OEmbedOptions {
   lang?: string
 }
 
-declare module '@cloudflare/pages-plugin-vercel-og/api' {
-  import type { ImageResponse as VercelImageResponse } from '@vercel/og'
+declare module "@cloudflare/pages-plugin-vercel-og/api" {
+  import type { ImageResponse as VercelImageResponse } from "@vercel/og"
 
   export declare class ImageResponse extends Response {
     constructor(...args: ConstructorParameters<typeof VercelImageResponse>)
   }
 }
-declare module '*.woff2' {
+declare module "*.woff2" {
   const content: ArrayBuffer
   export default content
 }
 
-declare module '*.woff' {
+declare module "*.woff" {
   const content: ArrayBuffer
   export default content
 }
 
-declare module '*.ttf' {
+declare module "*.ttf" {
   const content: ArrayBuffer
   export default content
 }

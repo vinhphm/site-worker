@@ -1,21 +1,24 @@
-import { ImageResponse } from '@cloudflare/pages-plugin-vercel-og/api'
-import { Hono } from 'hono'
-import { getLocalFonts } from './getFonts'
-import { loadImage } from './loadImage'
+import { ImageResponse } from "@cloudflare/pages-plugin-vercel-og/api"
+import { Hono } from "hono"
+import { getLocalFonts } from "./getFonts"
+import { loadImage } from "./loadImage"
+
+// HTTP status codes
+const HTTP_INTERNAL_SERVER_ERROR = 500
 
 const app = new Hono<{ Bindings: Env }>()
 
-export default app.get('/', async (c) => {
+export default app.get("/", async (c) => {
   try {
     const { title } = c.req.query()
 
     // Add input validation
     if (!title) {
-      throw new Error('Missing required query parameters')
+      throw new Error("Missing required query parameters")
     }
 
     const SocialCardTemplate = await (async () => {
-      const style = c.req.query('style')
+      const style = c.req.query("style")
 
       switch (style) {
         default:
@@ -50,7 +53,7 @@ export default app.get('/', async (c) => {
 
     // ********************** Local Fonts ********************** //
     const font = await getLocalFonts(c, [
-      { path: 'Inter-SemiBold.ttf', weight: 600 },
+      { path: "Inter-SemiBold.ttf", weight: 600 },
     ])
 
     // END Font Configuration
@@ -61,44 +64,44 @@ export default app.get('/', async (c) => {
     // http://127.0.0.1:8787/og?title=Building%20the%20Future%20of%20Web%20Development
     async function Style1() {
       try {
-        const logo = await loadImage(c, '/images/logo.png')
+        const logo = await loadImage(c, "/images/logo.png")
 
         return (
           <div
             style={{
-              backgroundColor: '#F0EFEA',
-              backgroundSize: '1200px 630px',
-              height: '100%',
-              width: '100%',
-              display: 'flex',
-              alignItems: 'flex-start',
-              justifyContent: 'flex-start',
+              backgroundColor: "#F0EFEA",
+              backgroundSize: "1200px 630px",
+              height: "100%",
+              width: "100%",
+              display: "flex",
+              alignItems: "flex-start",
+              justifyContent: "flex-start",
             }}
           >
             <div
               style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'flex-start',
-                height: '100%',
-                width: '100%',
-                padding: '5rem',
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "flex-start",
+                height: "100%",
+                width: "100%",
+                padding: "5rem",
               }}
             >
               <div
                 style={{
-                  display: 'flex',
-                  justifyContent: 'flex-start',
-                  alignItems: 'center',
+                  display: "flex",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
                 }}
               >
                 <span
                   style={{
-                    fontSize: '48px',
-                    letterSpacing: '-.05em',
-                    color: '#717170',
-                    padding: '0.125em 1.5rem 0 1.5rem',
+                    fontSize: "48px",
+                    letterSpacing: "-.05em",
+                    color: "#717170",
+                    padding: "0.125em 1.5rem 0 1.5rem",
                   }}
                 >
                   vinh.dev
@@ -108,17 +111,17 @@ export default app.get('/', async (c) => {
                     alt="vinh.dev"
                     height="40"
                     src={logo}
-                    style={{ marginLeft: '0.1rem' }}
+                    style={{ marginLeft: "0.1rem" }}
                     width="40"
                   />
                 )}
               </div>
               <h1
                 style={{
-                  fontSize: '60px',
-                  letterSpacing: '-.05em',
-                  color: '#141412',
-                  padding: '.25em 1.5rem 0 1.5rem',
+                  fontSize: "60px",
+                  letterSpacing: "-.05em",
+                  color: "#141412",
+                  padding: ".25em 1.5rem 0 1.5rem",
                 }}
               >
                 {title}
@@ -127,7 +130,7 @@ export default app.get('/', async (c) => {
           </div>
         )
       } catch (error) {
-        console.error('Style3 rendering error:', error)
+        console.error("Style3 rendering error:", error)
         throw error
       }
     }
@@ -138,10 +141,10 @@ export default app.get('/', async (c) => {
       fonts: Array.isArray(font) ? [...font] : [font],
     })
   } catch (error: any) {
-    console.error('OG Image generation error:', error)
+    console.error("OG Image generation error:", error)
     return c.json(
-      { error: 'Failed to generate image', details: error.message },
-      500
+      { error: "Failed to generate image", details: error.message },
+      HTTP_INTERNAL_SERVER_ERROR
     )
   }
 })
