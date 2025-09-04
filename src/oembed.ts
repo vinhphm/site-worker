@@ -1,4 +1,4 @@
-import { Hono } from "hono"
+import { Hono } from 'hono'
 
 // Cache for providers list
 let providersCache: any = null
@@ -17,7 +17,7 @@ async function getProviders() {
   }
 
   try {
-    const response = await fetch("https://oembed.com/providers.json")
+    const response = await fetch('https://oembed.com/providers.json')
     if (!response.ok) {
       throw new Error(`Failed to fetch providers: ${response.status}`)
     }
@@ -39,13 +39,13 @@ function findProvider(url: string, providers: OEmbedProvider[]) {
     for (const endpoint of provider.endpoints) {
       for (const scheme of endpoint.schemes || []) {
         const pattern = new RegExp(
-          `^${scheme.replace(/\*/g, ".*").replace(/\?/g, "\\?")}$`
+          `^${scheme.replace(/\*/g, '.*').replace(/\?/g, '\\?')}$`
         )
         if (pattern.test(url)) {
           return {
             name: provider.provider_name,
             endpoint: endpoint.url,
-            formats: endpoint.formats || ["json"],
+            formats: endpoint.formats || ['json'],
           }
         }
       }
@@ -55,7 +55,7 @@ function findProvider(url: string, providers: OEmbedProvider[]) {
         return {
           name: provider.provider_name,
           endpoint: endpoint.url,
-          formats: endpoint.formats || ["json"],
+          formats: endpoint.formats || ['json'],
         }
       }
     }
@@ -69,13 +69,13 @@ async function fetchOembedData(
   options: OEmbedOptions = {}
 ) {
   const embedUrl = new URL(provider.endpoint)
-  embedUrl.searchParams.set("url", targetUrl)
+  embedUrl.searchParams.set('url', targetUrl)
 
   // Set format preference (prefer json if available)
-  const format = provider.formats.includes("json")
-    ? "json"
+  const format = provider.formats.includes('json')
+    ? 'json'
     : provider.formats[0]
-  embedUrl.searchParams.set("format", format)
+  embedUrl.searchParams.set('format', format)
 
   // Add additional parameters if provided
   for (const [key, value] of Object.entries(options)) {
@@ -95,12 +95,12 @@ async function fetchOembedData(
 
 const app = new Hono<{ Bindings: Env }>()
 
-export default app.get("/", async (c) => {
+export default app.get('/', async (c) => {
   // Parse URL and get parameters
-  const targetUrl = c.req.query("url")
+  const targetUrl = c.req.query('url')
 
   if (!targetUrl) {
-    return c.json({ error: "Missing URL parameter" }, HTTP_BAD_REQUEST)
+    return c.json({ error: 'Missing URL parameter' }, HTTP_BAD_REQUEST)
   }
 
   try {
@@ -113,8 +113,8 @@ export default app.get("/", async (c) => {
     if (!provider) {
       return c.json(
         {
-          error: "Unsupported URL format",
-          message: "No oEmbed provider found for this URL",
+          error: 'Unsupported URL format',
+          message: 'No oEmbed provider found for this URL',
         },
         HTTP_BAD_REQUEST
       )
@@ -122,7 +122,7 @@ export default app.get("/", async (c) => {
 
     // Get additional options from query parameters
     const options: Record<string, string> = {}
-    const validOptions = ["maxwidth", "maxheight", "theme", "format", "lang"]
+    const validOptions = ['maxwidth', 'maxheight', 'theme', 'format', 'lang']
 
     for (const option of validOptions) {
       const value = c.req.query(option)
@@ -134,20 +134,20 @@ export default app.get("/", async (c) => {
     const data = await fetchOembedData(provider, targetUrl, options)
 
     const headers: Record<string, string> = {
-      "Content-Type": "application/json",
-      "Cache-Control": "public, max-age=3600",
-      "X-Provider": provider.name,
+      'Content-Type': 'application/json',
+      'Cache-Control': 'public, max-age=3600',
+      'X-Provider': provider.name,
     }
 
     return new Response(JSON.stringify(data), {
       headers: new Headers(headers),
     })
   } catch (error: any) {
-    console.error("Error:", error)
+    console.error('Error:', error)
 
     return c.json(
       {
-        error: "Error processing request",
+        error: 'Error processing request',
         message: error.message,
       },
       HTTP_INTERNAL_SERVER_ERROR
