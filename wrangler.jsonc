@@ -5,24 +5,24 @@
   "compatibility_flags": ["nodejs_compat_v2"],
   "assets": {
     "directory": "./public",
-    "binding": "ASSETS"
+    "binding": "ASSETS",
   },
   "minify": true,
   "routes": [
     {
       "pattern": "worker.vinh.dev/*",
-      "zone_name": "vinh.dev"
-    }
+      "zone_name": "vinh.dev",
+    },
   ],
   "build": {
-    "watch_dir": "./public"
+    "watch_dir": "./public",
   },
   "observability": {
     "enabled": true,
-    "head_sampling_rate": 1
+    "head_sampling_rate": 1,
   },
   "vars": {
     "SITE_URL": "https://vinh.dev",
-    "SITE_PREVIEW_URL": "https://vrelic.workers.dev"
-  }
+    "SITE_PREVIEW_URL": "https://vrelic.workers.dev",
+  },
 }
