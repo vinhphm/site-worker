@@ -1,1 +1,1 @@
-npx oxlint --fix . && npx prettier --write .
+npx oxlint --fix . && npx oxfmt

@@ -15,12 +15,13 @@ This project uses **bun** as the package manager (specified in `packageManager: 
 - `bun run dev` - Start development server with wrangler
 - `bun run deploy` - Deploy to Cloudflare with minification
 - `bun run lint` - Run linting with oxlint
-- `bun run lint:fix` - Auto-fix linting issues with oxlint and format with Prettier
-- `bun run format` - Format code with Prettier
+- `bun run lint:fix` - Auto-fix linting issues with oxlint and format with oxfmt
+- `bun run format` - Format code with oxfmt
+- `bun run format:check` - Check formatting without writing changes
 
 ### Pre-commit Hook
 
-The project has a pre-commit hook that runs `npx oxlint --fix . && npx prettier --write .` automatically before commits.
+The project has a pre-commit hook that runs `npx oxlint --fix . && npx oxfmt` automatically before commits.
 
 ## Architecture
 
@@ -94,7 +95,7 @@ The oEmbed endpoint has specific CORS rules allowing:
 
 ### Code Style
 
-- Uses OXLint for linting and Prettier for code formatting
+- Uses OXLint for linting and oxfmt for code formatting
 - TypeScript strict mode enabled
 - JSX configured for React
 - Pre-commit hooks ensure code formatting consistency
