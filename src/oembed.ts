@@ -1,5 +1,22 @@
 import { Hono } from 'hono'
 
+const EXTRA_PROVIDERS: OEmbedProvider[] = [
+  {
+    provider_name: 'Threads',
+    provider_url: 'https://www.threads.com/',
+    endpoints: [
+      {
+        url: 'https://graph.threads.net/v1.0/oembed',
+        schemes: [
+          'https://www.threads.com/@*/post/*',
+          'https://www.threads.com/t/*',
+        ],
+        formats: ['json'],
+      },
+    ],
+  },
+]
+
 // Cache for providers list
 let providersCache: any = null
 let providersCacheTime = 0
@@ -105,7 +122,7 @@ export default app.get('/', async (c) => {
 
   try {
     // Get providers list
-    const providers = await getProviders()
+    const providers = [...EXTRA_PROVIDERS, ...(await getProviders())]
 
     // Find the appropriate provider
     const provider = findProvider(targetUrl, providers)
