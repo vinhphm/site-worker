@@ -1,5 +1,13 @@
 import { Hono } from 'hono'
 
+const EXTRA_PROVIDERS = [
+  {
+    name: 'Threads',
+    endpoint: 'https://www.threads.net/api/oembed/',
+    schemes: ['https://www.threads.com/*', 'https://www.threads.net/*'],
+  },
+]
+
 // Cache for providers list
 let providersCache: any = null
 let providersCacheTime = 0
@@ -32,6 +40,20 @@ async function getProviders() {
     }
     throw error
   }
+}
+
+function findExtraProvider(url: string): ProviderInfo | null {
+  for (const provider of EXTRA_PROVIDERS) {
+    for (const scheme of provider.schemes) {
+      const pattern = new RegExp(
+        `^${scheme.replace(/\*/g, '.*').replace(/\?/g, '\\?')}$`
+      )
+      if (pattern.test(url)) {
+        return { name: provider.name, endpoint: provider.endpoint, formats: ['json'] }
+      }
+    }
+  }
+  return null
 }
 
 function findProvider(url: string, providers: OEmbedProvider[]) {
@@ -104,11 +126,9 @@ export default app.get('/', async (c) => {
   }
 
   try {
-    // Get providers list
+    // Check extra providers first, then fall back to fetched list
     const providers = await getProviders()
-
-    // Find the appropriate provider
-    const provider = findProvider(targetUrl, providers)
+    const provider = findExtraProvider(targetUrl) ?? findProvider(targetUrl, providers)
 
     if (!provider) {
       return c.json(
