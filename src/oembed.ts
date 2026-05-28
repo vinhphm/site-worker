@@ -3,7 +3,7 @@ import { Hono } from 'hono'
 const EXTRA_PROVIDERS = [
   {
     name: 'Threads',
-    endpoint: 'https://www.threads.net/api/oembed/',
+    endpoint: 'https://graph.facebook.com/v22.0/threads_oembed',
     schemes: ['https://www.threads.com/*', 'https://www.threads.net/*'],
   },
 ]
@@ -42,14 +42,19 @@ async function getProviders() {
   }
 }
 
-function findExtraProvider(url: string): ProviderInfo | null {
+function findExtraProvider(url: string, accessToken?: string): ProviderInfo | null {
   for (const provider of EXTRA_PROVIDERS) {
     for (const scheme of provider.schemes) {
       const pattern = new RegExp(
         `^${scheme.replace(/\*/g, '.*').replace(/\?/g, '\\?')}$`
       )
       if (pattern.test(url)) {
-        return { name: provider.name, endpoint: provider.endpoint, formats: ['json'] }
+        return {
+          name: provider.name,
+          endpoint: provider.endpoint,
+          formats: [],
+          accessToken,
+        }
       }
     }
   }
@@ -93,11 +98,14 @@ async function fetchOembedData(
   const embedUrl = new URL(provider.endpoint)
   embedUrl.searchParams.set('url', targetUrl)
 
-  // Set format preference (prefer json if available)
-  const format = provider.formats.includes('json')
-    ? 'json'
-    : provider.formats[0]
-  embedUrl.searchParams.set('format', format)
+  if (provider.formats.length > 0) {
+    const format = provider.formats.includes('json') ? 'json' : provider.formats[0]
+    embedUrl.searchParams.set('format', format)
+  }
+
+  if (provider.accessToken) {
+    embedUrl.searchParams.set('access_token', provider.accessToken)
+  }
 
   // Add additional parameters if provided
   for (const [key, value] of Object.entries(options)) {
@@ -128,7 +136,9 @@ export default app.get('/', async (c) => {
   try {
     // Check extra providers first, then fall back to fetched list
     const providers = await getProviders()
-    const provider = findExtraProvider(targetUrl) ?? findProvider(targetUrl, providers)
+    const provider =
+      findExtraProvider(targetUrl, c.env.META_ACCESS_TOKEN) ??
+      findProvider(targetUrl, providers)
 
     if (!provider) {
       return c.json(

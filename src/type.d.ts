@@ -5,6 +5,7 @@ type CacheStorage = {
 type Env = {
   SITE_URL: string
   SITE_PREVIEW_URL: string
+  META_ACCESS_TOKEN?: string
 }
 
 type OEmbedEndpoint = {
@@ -23,6 +24,7 @@ type ProviderInfo = {
   name: string
   endpoint: string
   formats: string[]
+  accessToken?: string
 }
 
 type OEmbedOptions = {

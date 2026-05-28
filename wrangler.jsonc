@@ -24,5 +24,6 @@
   "vars": {
     "SITE_URL": "https://vinh.dev",
     "SITE_PREVIEW_URL": "https://vrelic.workers.dev",
+    "META_ACCESS_TOKEN": "",
   },
 }
