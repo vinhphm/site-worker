@@ -3,7 +3,7 @@ import { Hono } from 'hono'
 const EXTRA_PROVIDERS = [
   {
     name: 'Threads',
-    endpoint: 'https://graph.facebook.com/v22.0/threads_oembed',
+    endpoint: 'https://www.threads.net/api/oembed/',
     schemes: ['https://www.threads.com/*', 'https://www.threads.net/*'],
   },
 ]
