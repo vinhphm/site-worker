@@ -1,4 +1,4 @@
-import { ImageResponse } from 'takumi-js/response'
+import { render } from 'takumi-js'
 import { Hono } from 'hono'
 import { getLocalFonts } from './getFonts'
 import { loadImage } from './loadImage'
@@ -135,10 +135,15 @@ export default app.get('/', async (c) => {
       }
     }
 
-    return new ImageResponse(SocialCardTemplate, {
+    const image = await render(SocialCardTemplate, {
       width: 1200,
       height: 630,
+      format: 'webp',
       fonts: Array.isArray(font) ? [...font] : [font],
+    })
+
+    return new Response(image, {
+      headers: { 'content-type': 'image/webp' },
     })
   } catch (error: any) {
     console.error('OG Image generation error:', error)
