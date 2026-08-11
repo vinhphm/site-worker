@@ -17,38 +17,41 @@ const EXTRA_PROVIDERS: OEmbedProvider[] = [
   },
 ]
 
-// Cache for providers list
-let providersCache: any = null
-let providersCacheTime = 0
-const MILLISECONDS_PER_HOUR = 1000
-const CACHE_DURATION = 24 * 60 * 60 * MILLISECONDS_PER_HOUR // 24 hours
+const PROVIDERS_CACHE_KEY = 'https://cache.internal/oembed-providers.json'
+const PROVIDERS_CACHE_MAX_AGE = 24 * 60 * 60 // 24 hours, in seconds
 
 // HTTP status codes
 const HTTP_BAD_REQUEST = 400
 const HTTP_INTERNAL_SERVER_ERROR = 500
 
-async function getProviders() {
-  // Return cached providers if available and not expired
-  if (providersCache && Date.now() - providersCacheTime < CACHE_DURATION) {
-    return providersCache
+// Timeout for outbound fetch to a provider's oEmbed endpoint
+const PROVIDER_FETCH_TIMEOUT_MS = 8000
+
+async function getProviders(): Promise<OEmbedProvider[]> {
+  const cache = caches.default
+  const cached = await cache.match(PROVIDERS_CACHE_KEY)
+  if (cached) {
+    return cached.json()
   }
 
-  try {
-    const response = await fetch('https://oembed.com/providers.json')
-    if (!response.ok) {
-      throw new Error(`Failed to fetch providers: ${response.status}`)
-    }
-
-    providersCache = await response.json()
-    providersCacheTime = Date.now()
-    return providersCache
-  } catch (error) {
-    // If we have a cached version, use it even if expired
-    if (providersCache) {
-      return providersCache
-    }
-    throw error
+  const response = await fetch('https://oembed.com/providers.json')
+  if (!response.ok) {
+    throw new Error(`Failed to fetch providers: ${response.status}`)
   }
+
+  const data = (await response.json()) as OEmbedProvider[]
+
+  await cache.put(
+    PROVIDERS_CACHE_KEY,
+    new Response(JSON.stringify(data), {
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': `public, max-age=${PROVIDERS_CACHE_MAX_AGE}`,
+      },
+    })
+  )
+
+  return data
 }
 
 function findProvider(url: string, providers: OEmbedProvider[]) {
@@ -101,7 +104,9 @@ async function fetchOembedData(
     }
   }
 
-  const response = await fetch(embedUrl)
+  const response = await fetch(embedUrl, {
+    signal: AbortSignal.timeout(PROVIDER_FETCH_TIMEOUT_MS),
+  })
 
   if (!response.ok) {
     throw new Error(`Failed to fetch oEmbed data: ${response.status}`)
