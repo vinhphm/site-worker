@@ -33,13 +33,6 @@ type OEmbedOptions = {
   lang?: string
 }
 
-declare module '@cloudflare/pages-plugin-vercel-og/api' {
-  import type { ImageResponse as VercelImageResponse } from '@vercel/og'
-
-  export declare class ImageResponse extends Response {
-    constructor(...args: ConstructorParameters<typeof VercelImageResponse>)
-  }
-}
 declare module '*.woff2' {
   const content: ArrayBuffer
   export default content

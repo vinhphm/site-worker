@@ -1,1 +1,1 @@
-npx oxlint --fix . && npx oxfmt
+bunx oxlint --fix . && bunx oxfmt

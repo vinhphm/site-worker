@@ -1,4 +1,4 @@
-import { ImageResponse } from '@cloudflare/pages-plugin-vercel-og/api'
+import { ImageResponse } from 'takumi-js/response'
 import { Hono } from 'hono'
 import { getLocalFonts } from './getFonts'
 import { loadImage } from './loadImage'
