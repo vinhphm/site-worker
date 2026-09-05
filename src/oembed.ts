@@ -166,7 +166,12 @@ export default app.on('GET', ['/', '/render'], async (c) => {
         return c.text('This provider did not return a rich embed', 422)
       }
       return new Response(
-        embedDocument(data.html, targetUrl, options.theme === 'dark'),
+        embedDocument(
+          data.html,
+          targetUrl,
+          options.theme === 'dark',
+          c.req.query('bg')
+        ),
         {
           headers: {
             'Content-Type': 'text/html; charset=utf-8',

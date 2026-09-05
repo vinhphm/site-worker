@@ -63,9 +63,50 @@ test('renderer preserves provider scripts in its own document and escapes the so
   expect(html).toContain(
     '<script src="https://provider.example/embed.js"></script>'
   )
-  expect(html).toContain('color-scheme:dark')
+  expect(html).toContain('background:#1c1c1c')
+  expect(html).not.toContain('color-scheme')
   expect(html).toContain('https://example.com/&quot;&lt;')
   expect(html).toContain("type:'vinh:embed-size'")
+})
+
+test('renderer paints an opaque background matching the theme, without setting color-scheme', () => {
+  expect(embedDocument('<p></p>', 'https://example.com', true)).toContain(
+    'background:#1c1c1c'
+  )
+  expect(embedDocument('<p></p>', 'https://example.com', false)).toContain(
+    'background:#ffffff'
+  )
+  expect(
+    embedDocument('<p></p>', 'https://example.com', true, '#0a0a0a')
+  ).toContain('background:#0a0a0a')
+  expect(
+    embedDocument('<p></p>', 'https://example.com', true, 'javascript:alert(1)')
+  ).toContain('background:#1c1c1c')
+  expect(embedDocument('<p></p>', 'https://example.com', true)).not.toContain(
+    'color-scheme'
+  )
+  expect(
+    embedDocument('<p></p>', 'https://example.com', false)
+  ).not.toContain('color-scheme')
+})
+
+test('renderer tags Bluesky embeds with a color mode, since Bluesky ignores the theme query param', () => {
+  const blueskyHtml =
+    '<blockquote class="bluesky-embed" data-bluesky-uri="at://did/app.bsky.feed.post/1" data-bluesky-cid="abc"><p>hello</p></blockquote><script async src="https://embed.bsky.app/static/embed.js"></script>'
+
+  const dark = embedDocument(blueskyHtml, 'https://example.com', true)
+  expect(dark).toContain('data-bluesky-embed-color-mode="dark"')
+
+  const light = embedDocument(blueskyHtml, 'https://example.com', false)
+  expect(light).toContain('data-bluesky-embed-color-mode="light"')
+
+  const alreadyTagged = embedDocument(
+    '<blockquote class="bluesky-embed" data-bluesky-embed-color-mode="light"><p>hi</p></blockquote>',
+    'https://example.com',
+    true
+  )
+  expect(alreadyTagged).toContain('data-bluesky-embed-color-mode="light"')
+  expect(alreadyTagged).not.toContain('data-bluesky-embed-color-mode="dark"')
 })
 
 test('JSON and renderer routes share provider results and reject same-origin rendering', async () => {
