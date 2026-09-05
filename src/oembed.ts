@@ -1,4 +1,6 @@
 import { Hono } from 'hono'
+import { findProvider, parsePublicUrl, sameSiteOrigin } from './providers'
+import { embedDocument } from './embed-document'
 
 const EXTRA_PROVIDERS: OEmbedProvider[] = [
   {
@@ -34,7 +36,9 @@ async function getProviders(): Promise<OEmbedProvider[]> {
     return cached.json()
   }
 
-  const response = await fetch('https://oembed.com/providers.json')
+  const response = await fetch('https://oembed.com/providers.json', {
+    signal: AbortSignal.timeout(PROVIDER_FETCH_TIMEOUT_MS),
+  })
   if (!response.ok) {
     throw new Error(`Failed to fetch providers: ${response.status}`)
   }
@@ -54,48 +58,18 @@ async function getProviders(): Promise<OEmbedProvider[]> {
   return data
 }
 
-function findProvider(url: string, providers: OEmbedProvider[]) {
-  for (const provider of providers) {
-    for (const endpoint of provider.endpoints) {
-      for (const scheme of endpoint.schemes || []) {
-        const pattern = new RegExp(
-          `^${scheme.replace(/\*/g, '.*').replace(/\?/g, '\\?')}$`
-        )
-        if (pattern.test(url)) {
-          return {
-            name: provider.provider_name,
-            endpoint: endpoint.url,
-            formats: endpoint.formats || ['json'],
-          }
-        }
-      }
-
-      // If no schemes defined but url matches provider url
-      if (!endpoint.schemes && url.startsWith(provider.provider_url)) {
-        return {
-          name: provider.provider_name,
-          endpoint: endpoint.url,
-          formats: endpoint.formats || ['json'],
-        }
-      }
-    }
-  }
-  return null
-}
-
 async function fetchOembedData(
   provider: ProviderInfo,
   targetUrl: string,
   options: OEmbedOptions = {}
 ) {
-  const embedUrl = new URL(provider.endpoint)
+  const embedUrl = new URL(provider.endpoint.replace('{format}', 'json'))
   embedUrl.searchParams.set('url', targetUrl)
 
   // Set format preference (prefer json if available)
-  const format = provider.formats.includes('json')
-    ? 'json'
-    : provider.formats[0]
-  embedUrl.searchParams.set('format', format)
+  if (!provider.formats.includes('json'))
+    throw new Error('Provider does not support JSON')
+  embedUrl.searchParams.set('format', 'json')
 
   // Add additional parameters if provided
   for (const [key, value] of Object.entries(options)) {
@@ -104,6 +78,9 @@ async function fetchOembedData(
     }
   }
 
+  // JSON and HTML routes share a provider cache, avoiding duplicate provider calls.
+  const cached = await caches.default.match(embedUrl.href)
+  if (cached) return cached.json()
   const response = await fetch(embedUrl, {
     signal: AbortSignal.timeout(PROVIDER_FETCH_TIMEOUT_MS),
   })
@@ -112,17 +89,39 @@ async function fetchOembedData(
     throw new Error(`Failed to fetch oEmbed data: ${response.status}`)
   }
 
-  return response.json()
+  const data = await response.json()
+  await caches.default.put(
+    embedUrl.href,
+    new Response(JSON.stringify(data), {
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'public, max-age=3600',
+      },
+    })
+  )
+  return data
 }
 
 const app = new Hono<{ Bindings: Env }>()
 
-export default app.get('/', async (c) => {
+export default app.on('GET', ['/', '/render'], async (c) => {
   // Parse URL and get parameters
   const targetUrl = c.req.query('url')
 
-  if (!targetUrl) {
-    return c.json({ error: 'Missing URL parameter' }, HTTP_BAD_REQUEST)
+  if (!targetUrl || !parsePublicUrl(targetUrl)) {
+    return c.json(
+      { error: 'A valid HTTP(S) URL is required' },
+      HTTP_BAD_REQUEST
+    )
+  }
+  const render = c.req.path.endsWith('/render')
+  if (
+    render &&
+    [c.env.SITE_URL, c.env.SITE_PREVIEW_URL].some((site) =>
+      sameSiteOrigin(new URL(c.req.url).origin, site)
+    )
+  ) {
+    return c.text('Embed renderer must use a separate origin', 403)
   }
 
   try {
@@ -144,7 +143,7 @@ export default app.get('/', async (c) => {
 
     // Get additional options from query parameters
     const options: Record<string, string> = {}
-    const validOptions = ['maxwidth', 'maxheight', 'theme', 'format', 'lang']
+    const validOptions = ['maxwidth', 'maxheight', 'theme', 'lang']
 
     for (const option of validOptions) {
       const value = c.req.query(option)
@@ -153,7 +152,32 @@ export default app.get('/', async (c) => {
       }
     }
 
-    const data = await fetchOembedData(provider, targetUrl, options)
+    const data = (await fetchOembedData(
+      provider,
+      targetUrl,
+      options
+    )) as Record<string, unknown>
+
+    if (render) {
+      if (
+        !['rich', 'video'].includes(String(data.type)) ||
+        typeof data.html !== 'string'
+      ) {
+        return c.text('This provider did not return a rich embed', 422)
+      }
+      return new Response(
+        embedDocument(data.html, targetUrl, options.theme === 'dark'),
+        {
+          headers: {
+            'Content-Type': 'text/html; charset=utf-8',
+            'Cache-Control': 'public, max-age=3600',
+            'X-Content-Type-Options': 'nosniff',
+            'Referrer-Policy': 'no-referrer',
+            'Content-Security-Policy': `frame-ancestors ${c.env.SITE_URL} ${c.env.SITE_PREVIEW_URL} http://localhost:4321 http://127.0.0.1:4321`,
+          },
+        }
+      )
+    }
 
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',

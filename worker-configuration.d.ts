@@ -6128,10 +6128,9 @@ declare namespace Rpc {
     T extends object,
     Reserved extends string = never,
   > = MaybeCallableProvider<T> & {
-    [K in Exclude<
-      keyof T,
-      Reserved | symbol | keyof StubBase<never>
-    >]: MethodOrProperty<T[K]>
+    [
+      K in Exclude<keyof T, Reserved | symbol | keyof StubBase<never>>
+    ]: MethodOrProperty<T[K]>
   }
 }
 declare namespace Cloudflare {
