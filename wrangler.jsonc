@@ -22,7 +22,7 @@
     "head_sampling_rate": 1,
   },
   "vars": {
-    "SITE_URL": "https://vinh.dev",
+    "SITE_URL": "https://vinh.dev,https://vinh.at",
     "SITE_PREVIEW_URL": "https://*.vinhw.workers.dev",
   },
 }
