@@ -85,9 +85,9 @@ test('renderer paints an opaque background matching the theme, without setting c
   expect(embedDocument('<p></p>', 'https://example.com', true)).not.toContain(
     'color-scheme'
   )
-  expect(
-    embedDocument('<p></p>', 'https://example.com', false)
-  ).not.toContain('color-scheme')
+  expect(embedDocument('<p></p>', 'https://example.com', false)).not.toContain(
+    'color-scheme'
+  )
 })
 
 test('renderer tags Bluesky embeds with a color mode, since Bluesky ignores the theme query param', () => {
@@ -135,7 +135,7 @@ test('JSON and renderer routes share provider results and reject same-origin ren
     })
   }) as typeof fetch
   const env = {
-    SITE_URL: 'https://site.example',
+    SITE_URL: 'https://site.example, https://second.example',
     SITE_PREVIEW_URL: 'https://*.preview.example',
   }
   try {
@@ -162,6 +162,13 @@ test('JSON and renderer routes share provider results and reject same-origin ren
       (await oembed.request(`https://site.example/render${query}`, {}, env))
         .status
     ).toBe(403)
+    expect(
+      (await oembed.request(`https://second.example/render${query}`, {}, env))
+        .status
+    ).toBe(403)
+    expect(rendered.headers.get('Content-Security-Policy')).toContain(
+      'https://second.example'
+    )
     expect(
       (
         await oembed.request(

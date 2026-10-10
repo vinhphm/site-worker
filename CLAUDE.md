@@ -67,7 +67,7 @@ The main entry point is `src/index.ts` which sets up a Hono app with:
 
 Configured in `wrangler.jsonc`:
 
-- `SITE_URL`: "https://vinh.dev"
+- `SITE_URL`: "https://vinh.dev" (may be a comma-separated list; the first entry is the primary, used for the `/` redirect)
 - `SITE_PREVIEW_URL`: "https://vrelic.workers.dev"
 
 ### CORS Configuration

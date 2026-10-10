@@ -1,5 +1,10 @@
 import { Hono } from 'hono'
-import { findProvider, parsePublicUrl, sameSiteOrigin } from './providers'
+import {
+  findProvider,
+  getSiteUrls,
+  parsePublicUrl,
+  sameSiteOrigin,
+} from './providers'
 import { embedDocument } from './embed-document'
 
 const EXTRA_PROVIDERS: OEmbedProvider[] = [
@@ -117,7 +122,7 @@ export default app.on('GET', ['/', '/render'], async (c) => {
   const render = c.req.path.endsWith('/render')
   if (
     render &&
-    [c.env.SITE_URL, c.env.SITE_PREVIEW_URL].some((site) =>
+    [...getSiteUrls(c.env.SITE_URL), c.env.SITE_PREVIEW_URL].some((site) =>
       sameSiteOrigin(new URL(c.req.url).origin, site)
     )
   ) {
@@ -178,7 +183,7 @@ export default app.on('GET', ['/', '/render'], async (c) => {
             'Cache-Control': 'public, max-age=3600',
             'X-Content-Type-Options': 'nosniff',
             'Referrer-Policy': 'no-referrer',
-            'Content-Security-Policy': `frame-ancestors ${c.env.SITE_URL} ${c.env.SITE_PREVIEW_URL} http://localhost:4321 http://127.0.0.1:4321`,
+            'Content-Security-Policy': `frame-ancestors ${[...getSiteUrls(c.env.SITE_URL), c.env.SITE_PREVIEW_URL].join(' ')} http://localhost:4321 http://127.0.0.1:4321`,
           },
         }
       )

@@ -22,6 +22,14 @@ function glob(value: string, pattern: string): boolean {
   return new RegExp(`^${escaped}$`).test(value)
 }
 
+/** SITE_URL may hold several comma-separated URLs; the first is the primary. */
+export function getSiteUrls(siteUrl: string | undefined): string[] {
+  return (siteUrl ?? '')
+    .split(',')
+    .map((url) => url.trim())
+    .filter(Boolean)
+}
+
 export function sameSiteOrigin(origin: string, site: string): boolean {
   return glob(origin, site.replace(/\/$/, ''))
 }

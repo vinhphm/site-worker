@@ -4,6 +4,7 @@ import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
 import oembed from './oembed'
 import og from './og'
+import { getSiteUrls } from './providers'
 
 const app = new Hono<{ Bindings: Env }>()
   .use('*', logger())
@@ -13,7 +14,7 @@ const app = new Hono<{ Bindings: Env }>()
       origin: (origin, c) => {
         const env = c.env
         const ALLOWED_ORIGINS = [
-          env.SITE_URL,
+          ...getSiteUrls(env.SITE_URL),
           env.SITE_PREVIEW_URL,
           'http://localhost:4321',
           'http://127.0.0.1:4321',
@@ -61,7 +62,7 @@ const app = new Hono<{ Bindings: Env }>()
     })
   )
   .get('/', (c) => {
-    return c.redirect(c.env.SITE_URL)
+    return c.redirect(getSiteUrls(c.env.SITE_URL)[0])
   })
   .route('og', og)
   .route('oembed', oembed)
